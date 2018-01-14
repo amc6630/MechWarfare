@@ -1,0 +1,13 @@
+{
+    "portname": "dev/ttyACM0", 
+    "baudrate": 115200, 
+    "offsetList": [
+        -100, 
+        100, 
+        50, 
+        10, 
+        -5, 
+        95
+    ], 
+    "servoNum": 6
+}
