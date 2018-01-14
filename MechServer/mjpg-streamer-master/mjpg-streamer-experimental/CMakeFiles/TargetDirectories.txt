@@ -1,0 +1,11 @@
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_opencv/filters/cvfilter_cpp/CMakeFiles/cvfilter_cpp.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_opencv/filters/cvfilter_py/CMakeFiles/cvfilter_py.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_file/CMakeFiles/input_file.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_http/CMakeFiles/input_http.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_opencv/CMakeFiles/input_opencv.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/CMakeFiles/mjpg_streamer.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/output_file/CMakeFiles/output_file.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/output_http/CMakeFiles/output_http.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/output_rtsp/CMakeFiles/output_rtsp.dir
+/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/output_udp/CMakeFiles/output_udp.dir
