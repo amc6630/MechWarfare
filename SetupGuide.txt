@@ -1,0 +1,122 @@
+By: Jeremy Lim
+5/19/17
+
+
+INTRO###############
+
+This guide is designed to walk you through setting up the mech leg control software on a raspberry pi, via the use of a mini maestro servo controller (from Pololu). This guide assumes basic knowledge of linux terminal use, and 
+
+Before you're ready to set up the leg software, be sure you've set up the following:
+
+1) Set up the raspberry pi as a wifi hotspot (Adafruit Guide). Have the ability to use ssh to log in remotely.
+
+2) Install cmake on the pi (used for the mjpg streamer software)
+
+3) Install python depencies, if not already present: numpy, and pyserial. You can quickly check this if you open up a python interpreter and try:
+   import serial
+   import numpy
+   If it gives you no issue, those python modules are already installed.
+
+4) Be sure that the legs ARE NOT assembled yet. The servos must be zeroed/positioned correctly for it to work.
+
+5) Please put the MechServer directory on the Raspberry pi. That contains all the software the pi needs for control.
+
+1: SETUP MAESTRO BOARD################
+
+1) Install the Pololu Maestro Control Center on a computer, and connect to the maestro board using that software. It is avaliable for Linux and Windows at the following link: https://www.pololu.com/product/1354/resources
+
+2) In the serial settings tab, make sure USB Dual port or USB Chained is selected. Some serial modes do not allow for communication via the usb serial, of which the raspberry pi utilizes.
+
+3) In the channel settings tab, for each of the servos that you will be using, set the min, max values for each channel to be 600,2400 (it will not let you choose those exactly, but it will be close).
+   These values correspond to roughly 180 degrees of rotation on standard servos. The default values limit to range to around 90 degrees.
+
+2: SERVO ASSEMBLY###############
+
+1) ZERO OUT the servos to the dead-center positions. It is IMPORTANT to do this before putting together the legs. You may use the Maestro control center, or any other method of doing this.
+   In the Maestro control center, dead center is typically 1500 micros.
+
+2) Assemble the legs in the zero position. Be sure to avoid rotating the servos as you assemble it. The positions are as follows:
+
+       Stars (*) are servo joints
+
+       Top View:
+
+         \          /
+          \        /
+           *------*  <---- Despite the picture, all legs must be orthogonal to each other.
+           |      |
+           |      |
+           *------*  <---- 45 degrees from chassis. Or, measuring from the side of the mech, 135 degrees from a given side.
+          /        \
+         /          \
+
+
+
+       Side View (of each leg):
+
+             Must be perfectly horizontal
+       |     |
+(body) |     |
+       |     V
+       |---*----------*   <--- Must be at a perfect 90 deg. angle.
+-------|              |
+                      |
+
+   Note: Because the servo horns have a groove pattern that must fit the servo, you may not get exactly the right angles in this step. Get as close as possible; further calibration will be done with software.
+
+3) The current software needs the servos to be plugged in a particular order on the mini maestro. The order is as follows:
+
+   0:  Front Right Chassis Servo (connected directly to chassis)
+   1:  FR Elevation Servo        (Lifts the whole leg)
+   2:  FR Knee servo             (bends the knee)
+   3:  Front Left Chassis Servo
+   4:  FL Elevation Servo
+   5:  FL Knee Servo
+   6:  Back Right Chassis Servo
+   7:  BR Elevation Servo
+   8:  BR Knee Servo
+   9:  Back Left Chassis Servo
+   10: BL Elevation Servo
+   11: BL Knee Servo
+   12: Turret Tilt (elevation)
+   13: Turret Pan  (yaw)
+   14: (Unused for maestro 18)
+   15: (Unused for maestro 18)
+   16: (Unused for maestro 18)
+   17: (Unused for maestro 18)
+
+3: SERVO CALIBRATION###############
+
+1) Connect the maestro to the raspberry pi. Run the maestroConfigTool. You will need to specify:
+   -Port name (It is typically /dev/ttyACM0)
+   -Baud rate (115200 is a good default)
+   -Servo Number (Number of servo ports ON THE BOARD. If you're using 4 out of 6 servos on your maestro, put 6.)
+   You may create a new config file, or modifiy an existing old one. View configExample to see an example.
+
+2) Using the maestroConfigTool, you may add offsets to each of the individual servos in order to calibrate them as close as possible to the figures in the Servo Assembly section.
+   -The number you type in is the calibration offset, in microseconds. experiment in intervals of 10.
+   -The number is added to the default dead zero number. You may enter negative numbers.
+   -Servos are indexed from zero.
+
+4: MECH CONFIGURATION#############
+
+1) Open up the MechServer python file. Edit the configuration settings listed in the top of the file.
+   -You will need to measure some lengths on the mech in order to calibrate the settings properly.
+   -Other settings (such as max speed, etc.) are more control based.
+   -The settings are commented, with notes on their effects on the robot.
+
+2) This is the tricky part. There are 4 functions after the calibrations settings: transformFor**, with ** being FR (front right), FL (front left), BR (back right), BL (back left). These functions transform the calculated leg angles into the servo commands for each servo.
+   Depending on the orientation of each servo on each leg, these functions will change:
+   Sub-steps:
+   A) I recommend using the right-hand rule to maintain consistency. Determine: does the highest duty cycle sent to the servos (2400 micros) correspond with positive omega, or negative omega (where omega is angular orientation)? The reverse should be true for the lowest duty cycle (600 micros). Record this in some form.
+   B) The "usBase" variable in each function is for the upward-facing servos mounted directly on the chassis. The angles for these servos follow the right-hand rule.
+      You must map values from (+pi/2,-pi/2) to (2400,600) if your servos follow the right hand rule. Otherwise, it must be (+pi/2,-pi/2) to (600,2400). The default code provided is for servos following the right hand rule.
+   C) The "usKnee" variable is for the knee joint (so to speak) of each leg. The input angle will range from 0 to pi, 0 being fully retracted, pi being fully extended. Map it to (600,2400) or (2400,600) depending on the servo's orientation.
+   D) The "usBaseHeight" variable is for the joint that raises the entire leg vertically. The input angle ranges from -pi/2 to +pi/2. The highest angle corresponds to the highest elevation, and vice versa. Similiar to the following steps, map it to either (600,2400) or (2400,600) depending on the servo orientation.
+
+
+3) Run the robot! Run the mech server, and one of the control scripts to control it manually. Repeat steps 1 + 2 as you run it to further calibrate it.
+   -If the mech is spazzing/"dancing" weirdly, it is likely that one of the functions in #2 is incorrect.
+   -If the mech makes a coherent walking motion, but is unstable/doesn't work well, play with settings in #1.
+
+That's it! This guide covers mainly the leg control. Gun/Turret Control isn't well supported right now, so modifications will need to be made to the control to support a specific motor/gearbox driver.

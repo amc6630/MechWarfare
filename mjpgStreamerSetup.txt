@@ -1,0 +1,23 @@
+Jeremy Lim
+5/19/17
+
+This is a setup guide for the mjpg streamer. Currently, this guide is optimized for using the raspberry pi camera with the mjpg streamer.
+
+NOTE: It is possible to use usb webcams with the streamer, but I found that the performance overhead is much higher than with using the raspberry pi camera (which I recommend)
+
+For reference information, check out the git repo: 
+
+1) Be sure that cmake is installed on the raspberry pi. It is necessary for setting up the mjpg streamer.
+
+2) Go into the mjpg-streamer-experimental directory, and run the command "cmake ." (no quotes). This will generate makefiles so you can compile it.
+
+3) run "make". This should compile all modules of the mjpg streamer.
+
+RUNNING THE STREAMER########
+
+1) There should be a streamStart.sh script that I provide that should start the script. Run it to start the streamer.
+   -Quickstart.sh is a separate script that I also provided. It is the settings I used for a logitech C270 webcam. It does not perform as well as the picam.
+
+2) I leave it as an exercise to the reader to setup the raspberry pi to run the script as soon as it starts up. I would suggest researching crontabs (specifically the @reboot directive). This can also be used to start up the mech control as well.
+
+

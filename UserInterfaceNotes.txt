@@ -1,0 +1,27 @@
+Jeremy Lim
+5/19/17
+
+Notes on the User control Software:
+
+Setting up the software only requires 2 things: a working version of python, and 2 dependencies installed:
+pygame (important)
+numpy  (this can be worked around)
+
+Theoretically, any platform that supports python and pygame can run the control interface.
+
+Notes on the interface:
+-The server software is listening on two ports for mech control: one for the movement control (8090), and another for the turret control (8091)(not well developed)
+ This allows the piloting to be either split up between 2 people (and potentially, each could have their own computer!) or all of it run on one interface.
+-The control protocol in use is UDP. It is not very secure, and quite a bit lossy. But hey, I don't think you'll be transmitting personal data to control the mech...
+-The mjpg streamer lives on port 8080. It is a http server, so any device with a browser can look at the video feed. (Smartphones included)
+
+Description of the software files:
+fairScript.py: A script that "spoofs" the control interface. Makes the mech turn right & left forever.
+botInterface.py: A keyboard interface that controls the mech legs. Can also stream video to display in the
+turretInterface.py: An interface for controlling the mech turret. Currently configured to use a controller joystick. 
+coolMoveInterface.py: An interface for controlling the mech legs via a joystick. A joystick also allows the mech to more easily demonstrate speed control and diagonal movement.
+
+(Non runnable files)
+displayTerminal.py: Class to facilitate making terminal feeds in a pygame user interface.
+valuePair.py: Class to facilitate making labels next to changeable values in a pygame user interface.
+videoSurface.py: Class to facilitate continously fetching video feed, to display in a pygame window.
