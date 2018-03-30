@@ -67,6 +67,22 @@ pitchMin = 1000        # Minimum period the pitch servo will go. In Microseconds
 yawMax = 2000          # Highest period the yaw servo will go. In Microseconds.
 yawMin = 1000          # Minimum period the yaw servo will go. In Microseconds.
 
+'''
+global effectDist
+global walkHeight
+global liftHeight
+global l_sweep
+global l_extend
+global triangleExpand
+global max_speed
+global rad_max
+global aim_update_const
+global pitchMax
+global pitchMin
+global yawMax
+global yawMin
+'''
+
 #Unused Constants (Some stuff used for the advanced linkage design)
 u_Length = 5.25 
 n_Length = 5.25
@@ -358,6 +374,41 @@ def dispatchServoCommands(mech_object,pololu_obj):
     
 
     pololu_obj.send_multi_command(0,14,commandBytes)
+    
+def settingsThread():
+
+    global is_running
+
+    host = ''
+    settingPort = 8092
+    settingSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    settingSocket.bind((host, settingPort))
+    
+    while is_running:
+        tempBuf = []
+        found = False
+        try:
+            tempBuf = settingSocket.recv(13)
+            found = True
+        except:
+            print "Error in settings"
+        
+        if found:
+            tempBuf = bytearray(tempBuf)
+            effectDist = tempBuf[0]
+            walkHeight = tempBuf[1]
+            liftHeight = tempBuf[2]
+            l_sweep = tempBuf[3]
+            l_extend = tempBuf[4]
+            triangleExpand = tempBuf[5]
+            max_speed = tempBuf[6]
+            rad_max = tempBuf[7]
+            aim_update_const = tempBuf[8]
+            pitchMax = tempBuf[9]
+            pitchMin = tempBuf[10]
+            yawMax = tempBuf[11]
+            yawMin = tempBuf[12]
+            
 
 #Thead for recieving network packets.
 def networkThread():
