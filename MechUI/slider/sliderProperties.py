@@ -12,8 +12,8 @@ class SliderProperties(object):
 
         self.textVerticleSpacing = 0#10;
         self.textHorizontalRelativeOffset = 0#10;
-        self.textWidth = 0#40;
-        self.textHeight = 0#20;
+        self.textWidth = 40;
+        self.textHeight = 20;
         
         self.xOffset = 0#10;
         self.yOffset = 0#10;
@@ -82,10 +82,18 @@ class SliderProperties(object):
     def getYOffset(self):
         return self.yOffset;
 
-    def getX(self, xOrigin):
-        return xOrigin + xOffset;
-    def getY(self, yOrigin):
-        return yOrigin + yOffset;
+    def getX(self, xOrigin, target):
+        if(target == "bar"):
+            return xOrigin + self.getXOffset();
+        elif(target == "text"):
+            return xOrigin + self.getXOffset()+ self.getTextHorizontalRelativeOffset();
+        return None;
+    def getY(self, yOrigin, target):
+        if(target == "bar"):
+            return yOrigin + self.getYOffset();
+        elif(target == "text"):
+            return yOrigin + self.getYOffset() + self.getBarHeight()+self.getTextVerticleSpacing();
+        return None;
          
 
     # implement logical accessors for special pixel to value coorespondancy

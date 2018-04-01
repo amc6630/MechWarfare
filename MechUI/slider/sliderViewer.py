@@ -9,6 +9,8 @@ class SliderViewer(object):
         self.rectangularView = rectangularView;
         self.sliderProp.initialize(self.rectangularView);
         self.sliderViewerTactic = sliderViewerTactic.SliderViewerTactic(self.rectangularView, self.slider, self.sliderProp);
+
+        pygame.font.init() # required to use text
         # setup rectangularView to match slider prop data
 
         
@@ -46,11 +48,13 @@ class SliderViewer(object):
                            self.getRadius());
         """
         
-        self.drawShape("rect.png","rect", screen, self.getSliderProp().getBarColor(), rect);
+        self.drawShape("rect.png","rect", screen, self.getSliderProp().getBarColor(), self.getSliderViewerTactic().getBarRect());
         self.drawShape("circle.png","circle", screen,
                            self.getSliderProp().getCursorColor(),
                            self.getSliderViewerTactic().getCursorPosition(),
                            self.getSliderViewerTactic().getRadius());
+        self.drawText(
+            str(self.getSlider().getValue()), self.getSliderViewerTactic().getTextRect(),screen)
         
 
         """
@@ -60,7 +64,14 @@ class SliderViewer(object):
                            self.getCursorPosition(),
                            self.getRadius());
         """
+
+    def drawText(self, text, rect, screen):
+        font = pygame.font.SysFont('Comic Sans MS', 12)
+        textObj = font.render(text, False, (255,255,255));
         
+        x,y,w,h = rect.x, rect.y, rect.w, rect.h
+        textObj = pygame.transform.chop(textObj, pygame.Rect(x,y,w,h));
+        screen.blit(textObj, (x,y));
         
     def drawShape(self, img, *args):
         if(".jpg" in img or ".png" in img or ".bmp" in img):
@@ -83,7 +94,7 @@ class SliderViewer(object):
             pygame.draw.circle(screen, color, pos, radius)
 
     def buildRectImage(self, image, Rect, screen): 
-        x,y,w,h = self.getRectangularView().extractProperties();
+        x,y,w,h = Rect.x, Rect.y, Rect.w, Rect.h;
         size = (w,h);
                     
         finalImage = pygame.transform.scale(image, size);
