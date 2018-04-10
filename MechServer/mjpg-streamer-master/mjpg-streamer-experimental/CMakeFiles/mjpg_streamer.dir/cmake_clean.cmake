@@ -1,4 +1,4 @@
-FILE(REMOVE_RECURSE
+file(REMOVE_RECURSE
   "CMakeFiles/mjpg_streamer.dir/mjpg_streamer.c.o"
   "CMakeFiles/mjpg_streamer.dir/utils.c.o"
   "mjpg_streamer.pdb"
@@ -6,6 +6,6 @@ FILE(REMOVE_RECURSE
 )
 
 # Per-language clean rules from dependency scanning.
-FOREACH(lang C)
-  INCLUDE(CMakeFiles/mjpg_streamer.dir/cmake_clean_${lang}.cmake OPTIONAL)
-ENDFOREACH(lang)
+foreach(lang C)
+  include(CMakeFiles/mjpg_streamer.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

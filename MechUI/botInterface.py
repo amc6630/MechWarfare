@@ -161,7 +161,7 @@ def main():
 
         #use sendto to send control info.
         #(host, portnum) format for address.
-        controlSocket.sendto(msgStr, ('192.168.42.1',8090)) #this address can be changed.
+        controlSocket.sendto(msgStr, ('192.168.137.34',8090)) #this address can be changed.
         #controlSocket.sendto(msgStr, ('127.0.0.1',8090))
 
         background.fill((0, 0, 0))

@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/mjpg_streamer.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/mjpg_streamer.h
 linux/types.h
 -
 linux/videodev2.h
@@ -14,35 +14,35 @@ linux/videodev2.h
 pthread.h
 -
 plugins/input.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input.h
 plugins/output.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/output.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/output.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input.h
 syslog.h
 -
 ../mjpg_streamer.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/mjpg_streamer.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/mjpg_streamer.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/RaspiCamControl.c
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/RaspiCamControl.c
 stdio.h
 -
 memory.h
 -
 interface/vcos/vcos.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/interface/vcos/vcos.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/interface/vcos/vcos.h
 interface/vmcs_host/vc_vchi_gencmd.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/interface/vmcs_host/vc_vchi_gencmd.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/interface/vmcs_host/vc_vchi_gencmd.h
 mmal/mmal.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal.h
 mmal/util/mmal_default_components.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_default_components.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_default_components.h
 RaspiCamControl.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/RaspiCamControl.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/RaspiCamControl.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/RaspiCamControl.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/RaspiCamControl.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/input_raspicam.c
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/input_raspicam.c
 stdio.h
 -
 stdlib.h
@@ -78,53 +78,53 @@ linux/types.h
 linux/videodev2.h
 -
 ../../mjpg_streamer.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/mjpg_streamer.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/mjpg_streamer.h
 ../../utils.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/utils.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/utils.h
 bcm_host.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/bcm_host.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/bcm_host.h
 interface/vcos/vcos.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/interface/vcos/vcos.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/interface/vcos/vcos.h
 mmal/mmal.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal.h
 mmal/util/mmal_default_components.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_default_components.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_default_components.h
 mmal/util/mmal_connection.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_connection.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_connection.h
 RaspiCamControl.c
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/RaspiCamControl.c
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/RaspiCamControl.c
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal.h
 mmal_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
 mmal_types.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
 mmal_port.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_port.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_port.h
 mmal_component.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_component.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_component.h
 mmal_parameters.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters.h
 mmal_metadata.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_metadata.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_metadata.h
 mmal_queue.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_queue.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_queue.h
 mmal_pool.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_pool.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_pool.h
 mmal_events.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_events.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_events.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_buffer.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_buffer.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_clock.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_clock.h
 interface/vcos/vcos.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/interface/vcos/vcos.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/interface/vcos/vcos.h
 mmal_types.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
 mmal_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
 stdlib.h
 -
 string.h
@@ -136,97 +136,97 @@ assert.h
 interface/vcos/vcos.h
 -
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_component.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_component.h
 mmal_types.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
 mmal_port.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_port.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_port.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_encodings.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_encodings.h
 mmal_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_events.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_events.h
 mmal_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
 mmal_parameters.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters.h
 mmal_port.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_port.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_port.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_format.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_format.h
 mmal_types.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
 mmal_encodings.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_encodings.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_encodings.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_metadata.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_metadata.h
 mmal_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters.h
 mmal_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
 mmal_parameters_camera.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_camera.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_camera.h
 mmal_parameters_video.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_video.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_video.h
 mmal_parameters_audio.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_audio.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_audio.h
 mmal_parameters_clock.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_clock.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_clock.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_audio.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_audio.h
 mmal_parameters_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_camera.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_camera.h
 mmal_parameters_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_clock.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_clock.h
 mmal_clock.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_clock.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_clock.h
 mmal_parameters_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_video.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_video.h
 mmal_parameters_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_pool.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_pool.h
 mmal_queue.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_queue.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_queue.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_port.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_port.h
 mmal_types.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
 mmal_format.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_format.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_format.h
 mmal_buffer.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_buffer.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_buffer.h
 mmal_parameters.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_parameters.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_queue.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_queue.h
 mmal_buffer.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_buffer.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_buffer.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_types.h
 mmal_common.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/mmal_common.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_connection.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_connection.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_default_components.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/mmal/util/mmal_default_components.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/output.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/output.h
 ../mjpg_streamer.h
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/mjpg_streamer.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/mjpg_streamer.h
 
-/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/utils.h
+/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/utils.h
 
 /opt/vc/include/bcm_host.h
 stdint.h

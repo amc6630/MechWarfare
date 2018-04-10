@@ -52,6 +52,8 @@ class MaestroInterface:
 
     def open_connection(self):
         self.pololu = serial.Serial(self.pololu_file, self.baud_rate)
+        if(self.pololu is None):
+            raise Exception("poplolu is Not Initalized")
         # wait a bit for the chip to initialize
         time.sleep(0.5)
         #send an initialization byte.
@@ -66,7 +68,7 @@ class MaestroInterface:
             raise Exception("Servo index out of bounds.")
         else:
             command_bytes = struct.pack('BBBB',0x84,servo_index,*self.get_duty_cycle(servo_input))
-            pololu.write(command_bytes)
+            self.pololu.write(command_bytes)
 
     # set pololu[servo_start_index...servo_start_index+num_servos-1] to be the values in command_list
     def send_multi_command(self,servo_start_index,num_servos,command_list):
@@ -80,7 +82,7 @@ class MaestroInterface:
         command_bytes.append(np.int8(0x9F))  # Command byte
         command_bytes.append(np.int8(num_servos))     # Number of channels we're controlling
         command_bytes.append(np.int8(servo_start_index))     # The start channel (the first one in this case)
-
+        
         
         for a in range(0,num_servos):
             val = command_list[a]+self.servo_offsets[a + servo_start_index]
@@ -90,7 +92,10 @@ class MaestroInterface:
                 val = 600
             command_bytes += self.get_duty_cycle(val)
 
-        self.pololu.write(bytearray(np.array(command_bytes)))
+        command_hexes=list(map(lambda x : hex(x), command_bytes))
+        
+	return self.pololu.write(bytearray(np.array(command_bytes)))
+       
         
     def get_duty_cycle(self, in_micro_secs):
         if in_micro_secs > 2400 or in_micro_secs < 600:

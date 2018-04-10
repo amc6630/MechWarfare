@@ -1,0 +1,686 @@
+#! /usr/bin/python
+
+#Jeremy Lim
+#Python script that runs the control interface of the robot.
+#5/19/17
+
+# NOTES:
+# Edited for lengths of my personal mech.
+# Has commented out GPIO control code.
+# Is "Technically" capable of true circular trajectories (translational + rotational movement simultaneously). It does not work well without careful tuning.
+# Besides the functions & code that need to be calibrated per mech, this version does not have clean code. You've been warned!
+
+import numpy as np
+import math
+import socket
+import serial
+
+import time
+import signal
+import sys
+import errno
+
+from legClassV3 import MechLeg
+from bodyClassV3 import MechBody
+#The new servo interface class.
+from maestroInterface import MaestroInterface
+
+import datetime
+import threading
+
+
+import RPi.GPIO as GPIO
+
+#Configuration Constants~~~~~~~~~~~~
+
+#Designed for the default mech configuration in mind
+
+# Calibration
+Config_Fname = "myConfigLegs" # Name of the calibration config file for leg servos. This is a path to the file (although you can put the filename if it's in the same directory)
+
+# Physcial Constants:
+L1major = 6.85           # Length of the upper part of the leg (thigh), in cm.
+L1minor = 5.20          # Length of the lower part of the leg (foot), in cm.
+servo_base_extend = 8.45  # the amount the elevation servo protrudes from the base, in cm.
+square_offset = 13.76    # Length of one side of the square that the chassis servos make. This code assumes the mech is in a square configuration.
+
+# Software Constants:
+effectDist = 1.5       # distance, in cm, before the leg starts to drop as it reaches its target. It follows a parabolic trajectory.
+walkHeight = -6.0      # How far below the chassis the leg tip is when walking at normal height.
+liftHeight = -3.5      # How far below the chassis the leg tip is when a leg is lifted up.
+                       # A higher stride height allows the mech to overcome obstacles easier, but makes it less stable.
+l_sweep = 90.0         # How much sweep angle the chassis servos have, in degrees.
+                       # 90 is generally a good standard.
+                       # Increasing this increases stride area, but can also run the risk of collision with other legs. Also tends to reduce stability.
+l_extend = 9.5         # When the mech is standing at the standard walk height, how far can the legs extend from the chassis (in cm).
+                       # This should be no longer than what the leg can physically extend to.
+                       # Artificially smaller values can sometimes increase stability.
+triangleExpand = 0.2   # Used to expand the stability triangle used in internal calculations slightly, in cm.
+                       # Allows gait transition fluidity, but reduces stability. It should be a small value.
+max_speed = 60.0       # Maximum translational speed the mech legs will be allowed to move. This effects ALL movements of the legs, so it should be a moderately high value.
+                       # For reference, this dictates what 100% speed it will attempt to move if getting a movement command.
+                       # Typically, set this moderately high, but have the client side limit the speed commands it sends from 15% to 50%
+rad_max = 2.0          # Maximum Rotational speed the mech will attempt. Values greater than 2.5 tend to result in spastic motions.
+aim_update_const = 5.0 # A multiplier on how fast the turret will pan. Slower values allow for greater stability, but less responsivity.
+pitchMax = 2000        # Highest period the pitch servo will go. In Microseconds.
+pitchMin = 1000        # Minimum period the pitch servo will go. In Microseconds.
+yawMax = 2000          # Highest period the yaw servo will go. In Microseconds.
+yawMin = 1000          # Minimum period the yaw servo will go. In Microseconds.
+
+#Unused Constants (Some stuff used for the advanced linkage design)
+u_Length = 5.25 
+n_Length = 5.25
+#servo2_x_offset = 2.7
+#servo2_y_offset = 2.0
+
+# Some other information (defined later in the code; not needed to edit during normal operation.)
+#legPort = 8090 #Port where the mech listens for leg commands.
+#turretPort = 8091 #port where the mech listens for turret commands.
+
+#GLOBAL VARIABLES-----------------------------
+#is our program running?
+is_running = True
+
+pitchVar = 1500 # These variables hold the pitch & yaw values for the turret.
+yawVar = 1500
+
+#Semaphore-Protected Command info
+resLock = threading.Semaphore(1)
+xCommand = 0.0
+yCommand = 0.0
+rCommand = 0.0
+toggleBits = 0x0
+
+yawCommand = 0.0
+pitchCommand = 0.0
+turretByte = 0x0
+
+# LEG TRANSFORMATION FUNCTIONS~~~~~~~~~~~~~~~~~~~~
+def legTransformFL(a_base,a_height,a_knee):
+    #command ordering: base(planar),base(height),knee(foot)
+    #range is 600 to 2400
+
+    usBase = a_base/(math.pi/2.0) * 900 + 1500 # For Servos following right-hand rule
+    #usBase = -a_base/(math.pi/2.0) * 900 + 1500 # Other servos
+
+    usBaseHeight = a_height/(math.pi/2.0)*900 +1500
+    #usBaseHeight = -a_height/(math.pi/2.0)* 900 + 1500
+
+    usKnee = 600 + (a_knee/math.pi)*1800
+    #usKnee = 2400 - (a_knee/math.pi)*1800 
+
+    #return getDutyCycle(usBase) + getDutyCycle(usBaseHeight) + getDutyCycle(usKnee)
+    return [clipValue(600,2400,usBase), clipValue(520,2400,usBaseHeight), clipValue(600,2400,usKnee)]
+
+
+def legTransformFR(a_base,a_height,a_knee):
+    #command ordering: base(planar),base(height),knee(foot)
+    #range is 600 to 2400
+
+    usBase = a_base/(math.pi/2.0) * 900 + 1500 # For Servos following right-hand rule
+    #usBase = -a_base/(math.pi/2.0) * 900 + 1500 # Other servos
+
+    #usBaseHeight = a_height/(math.pi/2.0)*900 +1500
+    usBaseHeight = -a_height/(math.pi/2.0)* 900 + 1500
+
+    #usKnee = 600 + (a_knee/math.pi)*1800
+    usKnee = 2400 - (a_knee/math.pi)*1800
+
+    #return getDutyCycle(usBase) + getDutyCycle(usKnee) + getDutyCycle(usBaseHeight)
+    return [clipValue(600,2400,usBase), clipValue(600,2400,usBaseHeight), clipValue(600,2400,usKnee)]
+
+
+def legTransformBL(a_base,a_height,a_knee):
+    #command ordering: base(planar),base(height),knee(foot)
+    #range is 600 to 2400
+
+    usBase = a_base/(math.pi/2.0) * 900 + 1500 # For Servos following right-hand rule
+    #usBase = -a_base/(math.pi/2.0) * 900 + 1500 # Other servos
+
+    usBaseHeight = a_height/(math.pi/2.0)*900 +1500
+    #usBaseHeight = -a_height/(math.pi/2.0)* 900 + 1500
+
+    usKnee = 600 + (a_knee/math.pi)*1800
+    #usKnee = 2400 - (a_knee/math.pi)*1800
+
+    #return getDutyCycle(usBase) + getDutyCycle(usBaseHeight) + getDutyCycle(usKnee)
+    return [clipValue(600,2400,usBase), clipValue(600,2400,usBaseHeight), clipValue(600,2400,usKnee)]
+
+
+def legTransformBR(a_base,a_height,a_knee):
+    #command ordering: base(planar),base(height),knee(foot)
+    #range is 600 to 2400
+
+    usBase = a_base/(math.pi/2.0) * 900 + 1500 # For Servos following right-hand rule
+    #usBase = -a_base/(math.pi/2.0) * 900 + 1500 # Other servos
+
+    #usBaseHeight = a_height/(math.pi/2.0)*900 +1500
+    usBaseHeight = -a_height/(math.pi/2.0)*900 +1500
+
+    #usKnee = 600 + (a_knee/math.pi)*1800
+    usKnee = 2400 - (a_knee/math.pi)*1800
+
+    #return getDutyCycle(usBase) + getDutyCycle(usBaseHeight) + getDutyCycle(usKnee)
+    return [clipValue(600,2400,usBase), clipValue(600,2400,usBaseHeight), clipValue(600,2400,usKnee)]
+#LEG TRANSFORMATION FUNCTIONS END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+def signal_handler(signal, frame):
+    #print "Graceful exit."
+    global is_running #Allow the function to find the global version of the variable.
+    global resLock
+
+    #print "Handling signal"
+    resLock.acquire()
+    is_running = False#turn of our loop variable to allow graceful closing.
+    resLock.release()
+
+    #print is_running
+    #sys.exit(0)
+
+
+#Helper functions here
+def clipValue(min,max,val):
+    if val > max:
+        return max
+    elif val < min:
+        return min
+    else:
+        return val
+
+def returnServoAngles(positionTuple,baseExtend,length1,length2):
+    #return 3 angles, corresponding to the servo leg angles
+    angleBaseRotate = 0
+    angleBaseHeight = 0
+    angleKnee = math.pi/2.0#0
+
+    #return angleBaseRotate, angleBaseHeight, angleKnee#returnAdvancedLinkageAngle(angleBaseHeight,angleKnee)
+
+    if positionTuple[1] > 0.0:
+        #y,x
+        #some transformations
+        angleBaseRotate = math.atan(positionTuple[0]/-positionTuple[1])
+
+    elif positionTuple[1] <= 0.0:
+        angleBaseRotate = 0.0
+    #else:
+        #Error state; cannot put a leg here!
+
+    extension = math.sqrt(math.pow(positionTuple[0],2.0) + math.pow(positionTuple[1],2.0))-baseExtend
+    #if extension < 0.0:
+        #jointPt = np.matrix([baseExtend*math.cos(angleBaseRotate),baseExtend*math.sin(angleBaseRotate),0])
+        #tipPt = np.matrix([positionTuple[0],positionTuple[1],positionTuple[2]])
+        #legExtension = np.linalg.norm(jointPt-tipPt)
+    #else:
+    legExtension = math.sqrt(math.pow(positionTuple[2],2.0) + math.pow(extension,2.0))
+
+    #Calculate intermediate result. to account for boundary conditions
+    kneeValue = (math.pow(legExtension,2.0)-math.pow(length1,2.0)-math.pow(length2,2.0))/(-2.0*length1*length2)
+    if kneeValue > 1.0:#overextend
+        angleKnee = 0.0
+    elif kneeValue < -1.0:#Hyperextend
+        angleKnee = math.pi
+    else:#within the proper length
+        angleKnee = math.acos(kneeValue)
+
+    #intermediate value for the vertical joint at the leg base.
+    heightExtend = (math.pow(length2,2.0)-math.pow(legExtension,2.0)-math.pow(length1,2.0))/(-2.0*length1*legExtension)
+    if heightExtend > 1.0:#underextend
+        heightExtend = 0.9999
+    elif heightExtend < -1.0:#hyperextend
+        heightExtend = -0.9999
+
+    #if extension >= 0.0:
+    angleBaseHeight = math.atan2(positionTuple[2],extension) + math.acos(heightExtend)
+    #else:
+        #if positionTuple[2] <= 0.0:
+            #angleBaseHeight = math.atan2(positionTuple[2],extension) + math.acos(heightExtend)
+        #else:
+            #angleBaseHeight = math.pi/2.0 + math.atan2(positionTuple[2],-extension) + math.acos(heightExtend)
+
+    #return angleBaseRotate, angleBaseHeight, returnAdvancedLinkageAngle(angleBaseHeight,angleKnee)
+    return angleBaseRotate, angleBaseHeight, angleKnee
+
+# Function for the more advanced linkage design.
+# depends on calculations for the simple linkage.
+def returnAdvancedLinkageAngle(in_base_angle,in_B_angle):
+    #Return the new knee angle, for the mech with the advanced leg linkages.
+    ptX = L1major*math.cos(in_base_angle) + L1major*math.cos(in_base_angle+in_B_angle)
+    ptY = L1major*math.sin(in_base_angle) + L1major*math.sin(in_base_angle+in_B_angle)
+
+    ZlengthSQ = math.pow((ptX - servo2_x_offset),2.0) + math.pow((ptY - servo2_y_offset),2.0)
+    Zangle = math.atan2((ptY-servo2_y_offset),(ptX-servo2_x_offset))
+
+    cosVal = (math.pow(u_Length,2.0)-ZlengthSQ-math.pow(u_Length,2.0))/(-2.0*math.sqrt(ZlengthSQ)*n_Length)
+    if cosVal >  0.999:
+        cosVal = 0.999
+    elif cosVal < -0.999:
+        cosVal = -0.999
+
+    openAdjust = math.acos(cosVal)
+
+    return Zangle + openAdjust
+
+#turn a value in microseconds into the pololu mini-maestro format
+def getDutyCycle(in_microSecs):
+    #Multiply by 4: the maestro operates in quarter-microseconds.
+    duty = np.int64(4*in_microSecs)
+    #we send the 
+    lowBits = duty & 0x007F
+    highBits = (duty >> 7) & 0x7F
+    #list of np.int8s
+    byteList = [np.int8(lowBits),np.int8(highBits)]
+    return byteList
+
+#Determines the height of the leg. Handles the parabolic drop trajectory.
+def getZHeight(targDist,in_grounded):
+    if in_grounded:
+        return walkHeight
+    elif targDist <= 0.0000001:
+        return walkHeight
+    elif targDist < effectDist:
+        #return a function of targdist
+        #vertex form of a parabola
+
+        a_const = -(liftHeight-walkHeight)/(math.pow(effectDist,2.0))
+        return walkHeight + a_const*math.pow((targDist-effectDist),2.0) + (liftHeight-walkHeight)
+        #return walkHeight+liftHeight
+    elif targDist >= effectDist:
+        return liftHeight
+
+#Handles dispatching commands to servos.
+def dispatchServoCommands(mech_object,pololu_obj):
+    #print "Command dispatch"
+    #Servo mappings:(by index)
+    #these are how the individual servos are mapped.
+    #0-2: FR-----------------------------(L1)
+    #Servo 0: base(Servo attached to the chassis)
+    #1: baseRotate
+    #2: knee
+    #3-5: FL-----------------------------(L4)
+    #6-8: BR-----------------------------(L2)
+    #9-11:BL-----------------------------(L3)
+
+    #Swapping the second two in each leg!
+
+    poselist,distlist,liftIndex = mech_object.get2DLegInfos();
+    #print poselist
+    #print distlist
+    #print liftIndex
+    #poselist = [np.matrix([0.0,8.0,1.0]),np.matrix([0,8.0,1.0]),np.matrix([0,8.0,1.0]),np.matrix([0,8.0,1.0])]
+
+    #tempTup = returnServoAngles(positionTuple,baseExtend,length1,length2)
+
+    commandBytes = []
+    #commandBytes.append(np.int8(0x9F)) #Command byte
+    #commandBytes.append(np.int8(14)) #Number of channels we're controlling
+    #commandBytes.append(np.int8(0))#The start channel (the first one in this case)
+    #Get command bytes for the front right leg.
+    tempTup = poselist[0][0,0], poselist[0][0,1], getZHeight(distlist[0],(liftIndex != 0)) 
+    #print tempTup
+    #rot, Dabase, knee  = returnServoAngles(tempTup,servo_base_extend,L1major,L1minor)
+    #knee = returnAdvancedLinkageAngle(base,knee)
+    #base, baseRot, knee = legTransformFR(rot, Dabase, knee)
+    #base, baseRot, knee = legTransformFR(*returnServoAngles(tempTup,servo_base_extend,L1major,L1minor))
+    legStr = legTransformFR(*returnServoAngles(tempTup,servo_base_extend,L1major,L1minor))
+    #legStr = [0,0,0]
+    #commandBytes.append(base)
+    #commandBytes.append(baseRot)
+    #commandBytes.append(knee)
+    commandBytes += legStr
+    #FL
+    tempTup = poselist[3][0,0], poselist[3][0,1], getZHeight(distlist[3],(liftIndex != 3))
+    #print tempTup
+    legStr = legTransformFL(*returnServoAngles(tempTup,servo_base_extend,L1major,L1minor))
+    #legStr = [0,0,0]#legTransformFL(*returnServoAngles(tempTup,servo_base_extend,L1major,L1minor))
+    #commandBytes.append(legStr)
+    commandBytes += legStr
+    #BR
+    tempTup = poselist[1][0,0], poselist[1][0,1], getZHeight(distlist[1],(liftIndex != 1))
+    #print tempTup
+    legStr = legTransformBR(*returnServoAngles(tempTup,servo_base_extend,L1major,L1minor))
+    #legStr = [0,0,0]
+    #commandBytes.append(legStr)
+    commandBytes += legStr
+    #BL
+    tempTup = poselist[2][0,0], poselist[2][0,1], getZHeight(distlist[2],(liftIndex != 2))
+    #print tempTup
+    legStr = legTransformBL(*returnServoAngles(tempTup,servo_base_extend,L1major,L1minor))
+    #legStr = [0,0,0]
+    #commandBytes.append(legStr)
+    commandBytes += legStr
+    #Pitch
+    #commandBytes.append(getDutyCycle(1500))
+    commandBytes.append(pitchVar)
+    #Yaw
+    #commandBytes.append(getDutyCycle(1500))
+    commandBytes.append(yawVar)
+
+    
+
+    pololu_obj.send_multi_command(0,14,commandBytes)
+
+#Thead for recieving network packets.
+def networkThread():
+
+    global is_running
+    global xCommand
+    global yCommand
+    global rCommand
+    global toggleBits
+
+    global resLock
+    #Setup socket.
+    #print "Launched UDP thread"
+
+    #set up socket communications
+    host = ''
+    legPort = 8090
+    turretPort = 8091
+    legSocket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+    #turretSocket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    legSocket.bind((host,legPort))
+    #non-blocking.
+    #legSocket.setblocking(0)
+    #2 second timeout.
+    #legSocket.settimeout(2)
+    #turretSocket.bind((host,turretPort))
+    MagicNum = 212
+    while is_running:
+        #This runs 200 times a second.
+        #sleep(1.0/200.0)
+        #print "Net loop"
+        #print is_running
+        #read bytes, if necessary.
+        #each command is 5 bytes
+        tempBuf = []
+        notFound = True
+        try:
+            #this is done with a 2-second timeout.
+            tempBuf = legSocket.recv(5)
+            notFound = False
+        except socket.error, e:
+            err = e.args[0]
+            if err != errno.EAGAIN and err != errno.EWOULDBLOCK:
+                #Crap. A different error occured.
+                print e
+                sys.exit(1)
+
+        if len(tempBuf) > 0 and (not notFound):
+            #print "got message:"
+            #print len(tempBuf)
+
+            #throw out garbage in the beginning.
+            #this will throw out messages that only come through partway.
+            goodIndex = 0
+            markIndex = -1
+            tempBuf = bytearray(tempBuf)
+
+            #while goodIndex < len(tempBuf):
+                #if tempBuf[goodIndex] == MagicNum:
+                    #markIndex = goodIndex
+                    #goodIndex = goodIndex + 5
+                    #we found the last complete message.
+                    #if (goodIndex + 5) >= len(tempBuf):
+                        #break
+                #else:
+                    #goodIndex += 1
+
+            #if markIndex != -1:
+                #commandStr = tempBuf[markIndex:(markIndex+5)]
+            #else:
+
+            commandStr = tempBuf
+            if len(commandStr) != 0:
+                if commandStr[0] == MagicNum:
+                    #only a 1% resolution for commands.
+                    #Grab the resource
+                    #print "getLock"
+                    resLock.acquire()
+                    xCommand = (np.int8(commandStr[1])/100.0)*max_speed
+                    yCommand = (np.int8(commandStr[2])/100.0)*max_speed
+                    rCommand = (np.int8(commandStr[3])/100.0)*rad_max
+                    toggleBits = commandStr[4]
+                    resLock.release()
+
+                    #print "X Command Network"
+                    #print xCommand
+                    print "Y Command"
+                    print yCommand
+                    #print "Rotational Command"
+                    #print rCommand
+                    #Release the resource.
+
+
+#Thead for recieving network packets.
+#turret
+def TurretNetworkThread():
+
+    global is_running
+
+    global yawCommand
+    global pitchCommand
+    global turretByte
+    global resLock
+    #Setup socket.
+    #print "Launched UDP thread"
+
+    #set up socket communications
+    host = ''
+    #legPort = 8090
+    turretPort = 8091
+    turretSocket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+    #turretSocket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    turretSocket.bind((host,turretPort))
+    #non-blocking.
+    #legSocket.setblocking(0)
+    #2 second timeout.
+    #legSocket.settimeout(2)
+    #turretSocket.bind((host,turretPort))
+    MagicNum = 212
+    while is_running:
+        #This runs 200 times a second.
+        #sleep(1.0/200.0)
+        #print "Net loop"
+        #print is_running
+        #read bytes, if necessary.
+        #each command is 5 bytes
+        tempBuf = []
+        notFound = True
+        try:
+            #this is done with a 2-second timeout.
+            tempBuf = turretSocket.recv(4)
+            notFound = False
+        except socket.error, e:
+            err = e.args[0]
+            if err != errno.EAGAIN and err != errno.EWOULDBLOCK:
+                #Crap. A different error occured.
+                print e
+                sys.exit(1)
+
+        if len(tempBuf) > 0 and (not notFound):
+            #print "got message:"
+            #print len(tempBuf)
+
+            #throw out garbage in the beginning.
+            #this will throw out messages that only come through partway.
+            goodIndex = 0
+            markIndex = -1
+            tempBuf = bytearray(tempBuf)
+
+            #while goodIndex < len(tempBuf):
+                #if tempBuf[goodIndex] == MagicNum:
+                    #markIndex = goodIndex
+                    #goodIndex = goodIndex + 5
+                    #we found the last complete message.
+                    #if (goodIndex + 5) >= len(tempBuf):
+                        #break
+                #else:
+                    #goodIndex += 1
+
+            #if markIndex != -1:
+                #commandStr = tempBuf[markIndex:(markIndex+5)]
+            #else:
+            commandStr = tempBuf
+
+            #print commandStr
+            if len(commandStr) != 0:
+                if commandStr[0] == MagicNum:
+                    #only a 1% resolution for commands.
+                    #Grab the resource
+                    #print "getLock"
+                    resLock.acquire()
+                    yawCommand = (np.int8(commandStr[1])/100.0)
+                    pitchCommand = (np.int8(commandStr[2])/100.0)
+                    turretByte = commandStr[3]
+                    resLock.release()
+                    # print "Turret command"
+
+                    #Release the resource.
+
+def main():
+    #set our proper global variable.
+    global resLock
+    global pitchVar
+    global yawVar
+    #allow for gracefull closing.
+    signal.signal(signal.SIGINT,signal_handler)
+
+    #GPIO.setmode(GPIO.BOARD)
+
+    #GPIO.setup(31,GPIO.OUT)#A pin
+    #GPIO.output(31,GPIO.LOW)
+
+    #GPIO.setup(33,GPIO.OUT)#B pin
+    #GPIO.output(33,GPIO.LOW)
+
+    #GPIO.setup(35,GPIO.OUT)#PWM (Pulse) pin
+    #GPIO.output(35,GPIO.LOW)
+    #GPIO.setup(29,GPIO.OUT)#Enable pin
+    #GPIO.output(29,GPIO.HIGH)
+
+
+
+
+    #initialize the leg algorithm class
+    bot = MechBody(np.matrix([0,0,1]),0.0,l_sweep,l_extend,square_offset,max_speed,rad_max,triangleExpand)
+
+    #setup maestro comms.
+    pololu = MaestroInterface(Config_Fname)
+
+    pololu.open_connection()
+    #set up serial communications
+    #pololu = serial.Serial("/dev/ttyACM0",115200)#
+
+    #write our starting bit
+    #byteList = np.array_str(np.array(np.int8(0xAA)))
+    #byteList.append(np.int8(0xAA))
+    #pololu.write(byteList)
+
+    #sleep for a little
+    #time.sleep(1.0)
+
+
+    #set up socket communications
+    netThread = threading.Thread(target=networkThread)
+    #Start our listening for network packets.
+    netThread.daemon = True
+    netThread.start()
+
+
+    turThread = threading.Thread(target=TurretNetworkThread)
+    #Start our listening for network packets.
+    turThread.daemon = True
+    turThread.start()
+
+    #host = ''
+    #legPort = 8090
+    #turretPort = 8091
+    #legSocket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+    #turretSocket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    #legSocket.bind((host,legPort))
+    #non-blocking.
+    #legSocket.setblocking(0)
+    #turretSocket.bind((host,turretPort))
+
+    commandStr = []
+    buildCommand = []
+
+    #structures used for loop timing
+    tLast = datetime.datetime.now()
+    tnow = datetime.datetime.now()
+
+    #main loop
+    while is_running:
+        # print "looptop"
+        #Acquire resource for shared memory
+        resLock.acquire()
+        xPut = xCommand
+        yPut = yCommand
+        rPut = rCommand
+
+        ySet = yawCommand
+        pSet = pitchCommand
+        gunShoot = turretByte
+        resLock.release()
+
+        #print "Y Command Legs"
+        #print yPut
+        #send commands
+        #Linear vector, angular velocity
+        bot.setCommand(np.matrix([xPut,yPut,0]),rPut)
+        #update
+        tnow = datetime.datetime.now()
+        #calculate how long it took (in seconds)
+        t_elapsed = tnow-tLast
+        period = t_elapsed.total_seconds()
+        #print period
+        bot.updateState(period)
+        tLast = datetime.datetime.now()
+
+        #print pitchVar
+        #print yawVar
+        #update turret angles.
+        # Constrain to min, max.
+        pitchVar -= pSet*aim_update_const
+        if pitchVar > pitchMax:
+            pitchVar = pitchMax
+        elif pitchVar < pitchMin:
+            pitchVar = pitchMin
+
+        yawVar -= ySet*aim_update_const
+        if yawVar > yawMax:
+            yawVar = yawMax
+        elif yawVar < yawMin:
+            yawVar = yawMin
+
+        #dispatch to legs.
+        #pololu = 3
+        dispatchServoCommands(bot,pololu)
+
+        #operate the gun.
+        #if gunShoot:
+            #A High completes the circuit
+            #GPIO.output(33,GPIO.HIGH)
+            #print "FIYA"
+        #else:
+            #Off
+            #GPIO.output(33,GPIO.LOW)
+
+
+        #run at about 60Hz
+        #sleep(1.0/1000.0)
+
+    #if we somehow escape, exit the program.
+    #close our socket, serial comm. nicely.
+    #print "Wait for netThread."
+    #netThread.join()
+    print "Exiting program."
+    #GPIO.cleanup()
+    pololu.close_connection()
+    sys.exit(0)
+
+
+if __name__ == '__main__': main()

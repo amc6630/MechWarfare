@@ -163,7 +163,7 @@ def main():
         #use sendto to send control info.
         #(host, portnum) format for address.
         #sending to turret control port.
-        controlSocket.sendto(msgStr, ('192.168.42.1',8091))
+        controlSocket.sendto(msgStr, ('192.168.43.32',8091))
         #print len(msgStr)
 
         background.fill((0, 0, 0))

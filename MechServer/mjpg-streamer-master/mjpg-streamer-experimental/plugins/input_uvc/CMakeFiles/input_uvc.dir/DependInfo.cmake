@@ -1,30 +1,29 @@
 # The set of languages for which implicit dependencies are needed:
-SET(CMAKE_DEPENDS_LANGUAGES
+set(CMAKE_DEPENDS_LANGUAGES
   "C"
   )
 # The set of files for implicit dependencies of each language:
-SET(CMAKE_DEPENDS_CHECK_C
-  "/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/dynctrl.c" "/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir/dynctrl.c.o"
-  "/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/input_uvc.c" "/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir/input_uvc.c.o"
-  "/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/jpeg_utils.c" "/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir/jpeg_utils.c.o"
-  "/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/v4l2uvc.c" "/home/jeremylim/Documents/psu_mech_latest/mymechStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir/v4l2uvc.c.o"
+set(CMAKE_DEPENDS_CHECK_C
+  "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/dynctrl.c" "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir/dynctrl.c.o"
+  "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/input_uvc.c" "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir/input_uvc.c.o"
+  "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/jpeg_utils.c" "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir/jpeg_utils.c.o"
+  "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/v4l2uvc.c" "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_uvc/CMakeFiles/input_uvc.dir/v4l2uvc.c.o"
   )
-SET(CMAKE_C_COMPILER_ID "GNU")
+set(CMAKE_C_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
-SET(CMAKE_TARGET_DEFINITIONS
+set(CMAKE_TARGET_DEFINITIONS_C
   "LINUX"
-  "USE_LIBV4L2"
   "_GNU_SOURCE"
   )
 
-# Targets to which this target links.
-SET(CMAKE_TARGET_LINKED_INFO_FILES
+# The include file search paths:
+set(CMAKE_C_TARGET_INCLUDE_PATH
   )
 
-# The include file search paths:
-SET(CMAKE_C_TARGET_INCLUDE_PATH
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
   )
-SET(CMAKE_CXX_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})
-SET(CMAKE_Fortran_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})
-SET(CMAKE_ASM_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})
+
+# Fortran module output directory.
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/input_raspicam.c" "/home/pi/Documents/MechWarfareStuff/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/CMakeFiles/input_raspicam.dir/input_raspicam.c.o"
+  "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/input_raspicam.c" "/home/pi/mech/MechWarfare/MechServer/mjpg-streamer-master/mjpg-streamer-experimental/plugins/input_raspicam/CMakeFiles/input_raspicam.dir/input_raspicam.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

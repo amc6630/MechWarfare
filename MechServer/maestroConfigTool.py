@@ -102,10 +102,11 @@ def main():
             input_str = raw_input("Enter new index: ")
             servIndex = int(input_str)
             print("servo index changed to " + str(servIndex))
-        elif str(input_str).lower() != "q":
-            offsetNum = int(input_str)
+        if str(input_str).lower() != "q":
+            offsetNum = int(raw_input("Enter new offset: "))
             print("Offset for servo # " + str(servIndex) + " is: " + str(offsetNum))
             servo_com[servIndex] = 1500 + offsetNum
+            print servo_com
             json_obj["offsetList"][servIndex] = offsetNum
 
         dispatch_commands(pololu,servo_com)   # write commands to serial.

@@ -1,4 +1,4 @@
-FILE(REMOVE_RECURSE
+file(REMOVE_RECURSE
   "CMakeFiles/input_uvc.dir/dynctrl.c.o"
   "CMakeFiles/input_uvc.dir/input_uvc.c.o"
   "CMakeFiles/input_uvc.dir/jpeg_utils.c.o"
@@ -8,6 +8,6 @@ FILE(REMOVE_RECURSE
 )
 
 # Per-language clean rules from dependency scanning.
-FOREACH(lang C)
-  INCLUDE(CMakeFiles/input_uvc.dir/cmake_clean_${lang}.cmake OPTIONAL)
-ENDFOREACH(lang)
+foreach(lang C)
+  include(CMakeFiles/input_uvc.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
