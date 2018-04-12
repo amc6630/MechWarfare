@@ -26,6 +26,13 @@ move_percentage = 15# When you press a key, what percentage of max speed will th
 Magic_num = 212# byte value at the start of each message. Consistent between server and this control software.
 
 def main():
+    some_num = 0
+    effectDist = 3.0
+    walkHeight = -3.0
+    liftHeight = -3.5
+    l_extend = 9.5
+    max_speed = 100.0
+    
     pygame.init()
 
     scr_size = 500, 400
@@ -76,7 +83,7 @@ def main():
 
     #keymap variable.
     #keeps track of when keys were pressed/released.
-    keymap = [False]*7
+    keymap = [False]*(7+3)
     #Keys to track: w a s d q e x
     xMove = 0
     yMove = 0
@@ -106,6 +113,12 @@ def main():
                     keymap[4] = True
                 if event.key == pygame.K_x:
                     keymap[6] = True
+                if event.key == pygame.K_l:
+                    keymap[7] = True
+                if event.key == pygame.K_i:
+                    keymap[8] = True
+                if event.key == pygame.K_k:
+                    keymap[9] = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_w:
                     keymap[0] = False
@@ -121,6 +134,12 @@ def main():
                     keymap[4] = False
                 if event.key == pygame.K_x:
                     keymap[6] = False
+                if event.key == pygame.K_l:
+                    keymap[7] = False
+                if event.key == pygame.K_i:
+                    keymap[8] = False
+                if event.key == pygame.K_k:
+                    keymap[9] = False
         yMove = 0
         xMove = 0
         rotation = 0
@@ -141,7 +160,35 @@ def main():
             rotation = -da_const#rotation - 2
 
         toggleValue = 0#np.int8(0)
+        
+        if keymap[7]:
+            some_num += 1
+            some_num %= 5
+            
+        if keymap[8]:
+            if some_num == 0:
+                effectDist += 0.1
+            elif some_num == 1:
+                walkHeight += 0.1
+            elif some_num == 2:
+                liftHeight += 0.1
+            elif some_num == 3:
+                l_extend += 0.1
+            elif some_num == 4:
+                max_speed += 5
 
+        if keymap[9]:
+            if some_num == 0:
+                effectDist -= 0.1
+            elif some_num == 1:
+                walkHeight -= 0.1
+            elif some_num == 2:
+                liftHeight -= 0.1
+            elif some_num == 3:
+                l_extend -= 0.1
+            elif some_num == 4:
+                max_speed -= 5
+                
         if keymap[6]:
             toggleValue = 0x80
         #build our message
@@ -151,12 +198,19 @@ def main():
         sendStr.append(yMove)
         sendStr.append(rotation)
         sendStr.append(toggleValue)
+        #6 more values to send through
+        sendStr.append(some_num)
+        sendStr.append(effectDist)
+        sendStr.append(walkHeight)
+        sendStr.append(liftHeight)
+        sendStr.append(l_extend)
+        sendStr.append(max_speed)
         #might be unneeded.
         #writeStr = np.array(sendStr)
         #print writeStr
         #print sendStr
-
-        msgStr = struct.pack('Bbbbb',*sendStr)
+        
+        msgStr = struct.pack('Bbbbbbbbbbb',*sendStr)
         #msgStr = bytearray(sendStr)
 
         #use sendto to send control info.

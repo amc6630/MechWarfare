@@ -27,6 +27,7 @@ from maestroInterface import MaestroInterface
 
 import datetime
 import threading
+import os
 
 
 import RPi.GPIO as GPIO
@@ -372,6 +373,13 @@ def networkThread():
     global resLock
     #Setup socket.
     #print "Launched UDP thread"
+    
+    #More global variables 2k18
+    global effectDist
+    global walkHeight
+    global liftHeight
+    global l_extend
+    global max_speed
 
     #set up socket communications
     host = ''
@@ -398,7 +406,8 @@ def networkThread():
         notFound = True
         try:
             #this is done with a 2-second timeout.
-            tempBuf = legSocket.recv(5)
+            #2k18 update: 6 more values to obtain
+            tempBuf = legSocket.recv(5+6)
             notFound = False
         except socket.error, e:
             err = e.args[0]
@@ -438,16 +447,37 @@ def networkThread():
                     #Grab the resource
                     #print "getLock"
                     resLock.acquire()
+                    
+                    arb_num = np.int8(commandStr[-6])
+                    effectDist = np.int8(commandStr[-5])
+                    walkHeight = np.int8(commandStr[-4])
+                    liftHeight = np.int8(commandStr[-3])
+                    l_extend = np.int8(commandStr[-2])
+                    max_speed = np.int8(commandStr[-1])
+                    
                     xCommand = (np.int8(commandStr[1])/100.0)*max_speed
                     yCommand = (np.int8(commandStr[2])/100.0)*max_speed
                     rCommand = (np.int8(commandStr[3])/100.0)*rad_max
+                    
                     toggleBits = commandStr[4]
+       
                     resLock.release()
+                    
+                    arrow = [' ' * 12] * 5
+                    arrow[arb_num] = '\/' * 6
+                    arrow = ''.join(arrow)
+                    
+                    print arrow
+                    print "effectDist  walkHeight  liftHeight  l_extend    max_speed   "
+                    print "{}          {}          {}          {}          {}".format(effectDist, walkHeight, liftHeight, l_extend, max_speed)
 
+                    #Don't know if this works on Raspberry pi
+                    os.system('clear')
+                    
                     #print "X Command Network"
                     #print xCommand
-                    print "Y Command"
-                    print yCommand
+                    #print "Y Command"
+                    #print yCommand
                     #print "Rotational Command"
                     #print rCommand
                     #Release the resource.
