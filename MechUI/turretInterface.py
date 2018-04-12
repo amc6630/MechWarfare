@@ -26,10 +26,11 @@ def main():
 
     scr_size = 500, 400
 
+    #Commented all joystick code until we have a working joystick
     #setup joysticks
-    pygame.joystick.init()
-    contr1 = pygame.joystick.Joystick(0)
-    contr1.init()
+    #pygame.joystick.init()
+    #contr1 = pygame.joystick.Joystick(0)
+    #contr1.init()
 
     #print contr1.get_name()
     #print contr1.get_numaxes()
@@ -45,7 +46,7 @@ def main():
 
     #Add the video display
     #"http://192.168.42.1:8080/?action=snapshot"
-    #vidFeed = VideoSurface("http://192.168.42.1:8080/?action=snapshot",(200,50));
+    #vidFeed = VideoSurface("http://192.168.137.34:8080/?action=snapshot",(200,50));
 
 
     #xPair = LabelPair((50,50),"X: ")
@@ -72,6 +73,9 @@ def main():
 
     screen.blit(background, (0, 0))
     pygame.display.flip()
+    
+    theX = 0.0
+    theY = 0.0
 
     while 1:
         #network update
@@ -101,7 +105,9 @@ def main():
         #|
         #|   +y
         #\/
-
+        
+        toggleValue = 0
+        
         #events update
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -109,9 +115,21 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return
+                if event.key == pygame.K_w:
+                    theY += 0.01
+                if event.key == pygame.K_s:
+                    theY -= 0.01
+                if event.key == pygame.K_a:
+                    theX -= 0.01
+                if event.key == pygame.K_d:
+                    theX += 0.01
+                if event.key == pygame.K_SPACE:
+                    toggleValue = 0x01
+            
         
-        theX = contr1.get_axis(2)
-        theY = contr1.get_axis(3)
+        #Commented 2k18
+        #theX = contr1.get_axis(2)
+        #theY = contr1.get_axis(3)
 
         #mouse control experiments
         #delta = pygame.mouse.get_rel()
@@ -138,15 +156,21 @@ def main():
         #x2, y2 = pygame.mouse.get_pos()
         #theX = x1 - 500
         #theY = y1 - 500
-        theX = contr1.get_axis(2)
-        theY = contr1.get_axis(3)
+        
+        #Commented 2k18
+        #theX = contr1.get_axis(2)
+        #theY = contr1.get_axis(3)
+        #Commented ^^^
+        
         #xPair.setDispNumber(theX)
         #yPair.setDispNumber(theY)
 
-        toggleValue = 0#np.int8(0)
+        #toggleValue = 0#np.int8(0)
         #right trigger ("8" button)
-        if contr1.get_button(7):
-            toggleValue = 0x01
+        
+        #Commented 2k18
+        #if contr1.get_button(7):
+        #    toggleValue = 0x01
 
         #build our message
         sendStr = []
@@ -163,7 +187,7 @@ def main():
         #use sendto to send control info.
         #(host, portnum) format for address.
         #sending to turret control port.
-        controlSocket.sendto(msgStr, ('192.168.43.32',8091))
+        controlSocket.sendto(msgStr, ('192.168.137.34',8091))
         #print len(msgStr)
 
         background.fill((0, 0, 0))
