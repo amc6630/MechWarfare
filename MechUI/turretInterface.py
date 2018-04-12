@@ -16,6 +16,7 @@ import pygame
 from pygame.locals import *
 
 from time import sleep
+import os
 
 #some global constants
 const_text_color = (255,255,255)
@@ -45,6 +46,7 @@ def main():
     background.fill((0, 0, 0))
 
     #Add the video display
+    #os.system("sh ../MechServer/mjpg-streamer-master/mjpg-streamer-experimental/streamStart.sh")
     #"http://192.168.42.1:8080/?action=snapshot"
     #vidFeed = VideoSurface("http://192.168.137.34:8080/?action=snapshot",(200,50));
 
@@ -115,13 +117,13 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_w and theY < 1.0:
                     theY += 0.01
-                if event.key == pygame.K_s:
+                if event.key == pygame.K_s and theY > -1.0:
                     theY -= 0.01
-                if event.key == pygame.K_a:
+                if event.key == pygame.K_a and theX > -1.0:
                     theX -= 0.01
-                if event.key == pygame.K_d:
+                if event.key == pygame.K_d and theX < 1.0:
                     theX += 0.01
                 if event.key == pygame.K_SPACE:
                     toggleValue = 0x01
