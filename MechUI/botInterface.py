@@ -27,11 +27,11 @@ Magic_num = 212# byte value at the start of each message. Consistent between ser
 
 def main():
     some_num = 0
-    effectDist = 3.0
-    walkHeight = -3.0
-    liftHeight = -3.5
-    l_extend = 9.5
-    max_speed = 100.0
+    effectDist = 30
+    walkHeight = -30
+    liftHeight = -35
+    l_extend = 95
+    max_speed = 10
     
     pygame.init()
 
@@ -166,28 +166,28 @@ def main():
             some_num %= 5
             
         if keymap[8]:
-            if some_num == 0:
-                effectDist += 0.1
-            elif some_num == 1:
-                walkHeight += 0.1
-            elif some_num == 2:
-                liftHeight += 0.1
-            elif some_num == 3:
-                l_extend += 0.1
-            elif some_num == 4:
-                max_speed += 5
+            if some_num == 0 and effectDist < 127:
+                effectDist += 1
+            elif some_num == 1 and walkHeight < 127:
+                walkHeight += 1
+            elif some_num == 2 and liftHeight < 127:
+                liftHeight += 1
+            elif some_num == 3 and l_extend < 127:
+                l_extend += 1
+            elif some_num == and max_speed < 127:
+                max_speed += 1
 
         if keymap[9]:
-            if some_num == 0:
-                effectDist -= 0.1
-            elif some_num == 1:
-                walkHeight -= 0.1
-            elif some_num == 2:
-                liftHeight -= 0.1
-            elif some_num == 3:
-                l_extend -= 0.1
-            elif some_num == 4:
-                max_speed -= 5
+            if some_num == 0 and effectDist > -128:
+                effectDist -= 1
+            elif some_num == 1 and walkHeight > -128:
+                walkHeight -= 1
+            elif some_num == 2 and liftHeight > -128:
+                liftHeight -= 1
+            elif some_num == 3 and l_extend > -128:
+                l_extend -= 1
+            elif some_num == 4 and max_speed > 0:
+                max_speed -= 1
                 
         if keymap[6]:
             toggleValue = 0x80

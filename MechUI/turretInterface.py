@@ -75,9 +75,6 @@ def main():
 
     screen.blit(background, (0, 0))
     pygame.display.flip()
-    
-    theX = 0.0
-    theY = 0.0
 
     while 1:
         #network update
@@ -109,7 +106,7 @@ def main():
         #\/
         
         toggleValue = 0
-        
+        theX, theY = 0.0, 0.0
         #events update
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -118,13 +115,13 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     return
                 if event.key == pygame.K_w and theY < 1.0:
-                    theY += 0.01
+                    theY = 1.0
                 if event.key == pygame.K_s and theY > -1.0:
-                    theY -= 0.01
+                    theY = -1.0
                 if event.key == pygame.K_a and theX > -1.0:
-                    theX -= 0.01
+                    theX = -1.0
                 if event.key == pygame.K_d and theX < 1.0:
-                    theX += 0.01
+                    theX = 1.0
                 if event.key == pygame.K_SPACE:
                     toggleValue = 0x01
             
