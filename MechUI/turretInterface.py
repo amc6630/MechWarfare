@@ -21,6 +21,8 @@ import os
 #some global constants
 const_text_color = (255,255,255)
 
+joystick = False
+
 def main():
     #print "try"
     pygame.init()
@@ -29,9 +31,11 @@ def main():
 
     #Commented all joystick code until we have a working joystick
     #setup joysticks
-    #pygame.joystick.init()
-    #contr1 = pygame.joystick.Joystick(0)
-    #contr1.init()
+    contr1 = None
+    if joystick:
+        pygame.joystick.init()
+        contr1 = pygame.joystick.Joystick(0)
+        contr1.init()
 
     #print contr1.get_name()
     #print contr1.get_numaxes()
@@ -124,11 +128,11 @@ def main():
                     theX = 1.0
                 if event.key == pygame.K_SPACE:
                     toggleValue = 0x01
-            
         
         #Commented 2k18
-        #theX = contr1.get_axis(2)
-        #theY = contr1.get_axis(3)
+        if joystick:
+            theX = contr1.get_axis(2)
+            theY = contr1.get_axis(3)
 
         #mouse control experiments
         #delta = pygame.mouse.get_rel()
@@ -157,8 +161,9 @@ def main():
         #theY = y1 - 500
         
         #Commented 2k18
-        #theX = contr1.get_axis(2)
-        #theY = contr1.get_axis(3)
+        if joystick:
+            theX = contr1.get_axis(2)
+            theY = contr1.get_axis(3)
         #Commented ^^^
         
         #xPair.setDispNumber(theX)
@@ -168,8 +173,9 @@ def main():
         #right trigger ("8" button)
         
         #Commented 2k18
-        #if contr1.get_button(7):
-        #    toggleValue = 0x01
+        if joystick:
+            if contr1.get_button(7):
+                toggleValue = 0x01
 
         #build our message
         sendStr = []
