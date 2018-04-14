@@ -576,6 +576,13 @@ def TurretNetworkThread():
                     #Release the resource.
 
 def main():
+    #GPIO Pins: 31, 33, 35, 37
+    #Motor 1
+    IN1 = 31
+    IN2 = 33
+    #Motor 2
+    IN3 = 35
+    IN4 = 37
     #set our proper global variable.
     global resLock
     global pitchVar
@@ -647,7 +654,10 @@ def main():
     #structures used for loop timing
     tLast = datetime.datetime.now()
     tnow = datetime.datetime.now()
-
+    GPIO.output(IN2, GPIO.LOW)
+    GPIO.output(IN1, GPIO.LOW)
+    GPIO.output(IN3, GPIO.LOW)
+    GPIO.output(IN4, GPIO.LOW)
     #main loop
     while is_running:
         #print "looptop"
@@ -697,13 +707,13 @@ def main():
         dispatchServoCommands(bot,pololu)
 
         #operate the gun.
-        #if gunShoot:
+        if gunShoot:
             #A High completes the circuit
-            #GPIO.output(33,GPIO.HIGH)
+            GPIO.output(IN1,GPIO.HIGH)
             #print "FIYA"
-        #else:
+        else:
             #Off
-            #GPIO.output(33,GPIO.LOW)
+            GPIO.output(IN1,GPIO.LOW)
 
 
         #run at about 60Hz
